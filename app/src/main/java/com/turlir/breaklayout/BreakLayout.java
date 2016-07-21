@@ -54,6 +54,8 @@ public class BreakLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
+        mStrategy.clear();
+
         mChildMaxHeight = 0;
         int layoutWidth = getMeasuredWidth();
         int childState = 0;
@@ -90,18 +92,25 @@ public class BreakLayout extends ViewGroup {
                     current = selectMode(k, i + 1, rows);
                     current.setParentWidth(layoutWidth);
                     mStrategy.put(rows, current);
+                } else {
+                    current.setStop(i + 1);
                 }
                 current.setFreeSpace(layoutWidth - rowWidth);
-                current.setStop(i + 1);
+                if (rows > 0) {
+                    current.setRowMargin(mChildMaxHeight);
+                }
             }
         }
 
         // compute parent height based on rows
         int parentHeight = mChildMaxHeight * (rows + 1);
         parentHeight += getPaddingTop() + getPaddingBottom();
+        parentHeight += 50 * rows;
 
         parentHeight = Math.max(parentHeight, getSuggestedMinimumHeight());
         layoutWidth = Math.max(layoutWidth, getSuggestedMinimumWidth());
+
+        Log.d("turlir", "onMeasure parentHeight = " + parentHeight + " layoutWidth " + layoutWidth);
 
         int measuredWidth = resolveSizeAndState(layoutWidth, widthMeasureSpec, childState);
         int measuredHeight = resolveSizeAndState(parentHeight, heightMeasureSpec, childState << MEASURED_HEIGHT_STATE_SHIFT);
@@ -191,6 +200,7 @@ public class BreakLayout extends ViewGroup {
 
         void placement(ViewGroup parent);
 
+        void setRowMargin(int rowMargin);
     }
 
     public static abstract class SimpleMode implements Mode {
@@ -203,6 +213,7 @@ public class BreakLayout extends ViewGroup {
         private int start, stop, index;
         protected int rowWidth = 0;
         private int mLeftPadding, mTopPadding;
+        private int mVerticalMargin;
 
         public SimpleMode(int start, int stop, int index) {
             this.start = start;
@@ -211,25 +222,30 @@ public class BreakLayout extends ViewGroup {
         }
 
         @Override
+        public void setRowMargin(int rowMargin) {
+            mVerticalMargin = rowMargin;
+        }
+
+        @Override
         public void placement(ViewGroup parent) {
             final int gravity = Gravity.START;
-            final int length = getStop() - getStart();
             mTopPadding = parent.getPaddingTop();
             mLeftPadding = parent.getPaddingLeft();
             rowWidth = 0;
 
-            for (int i = 0; i < length; i++) {
+            for (int i = getStart(); i < getStop(); i++) {
                 View child = parent.getChildAt(i);
                 if (child.getVisibility() != View.GONE) {
                     mLp = (BreakLayoutParams) child.getLayoutParams();
                     int w = child.getMeasuredWidth();
                     int h = child.getMeasuredHeight();
 
-                    rowWidth += expand(rect, w, h, mLp, i, rowWidth, mLeftPadding, mTopPadding)
+                    int z = i - getStart();
+                    rowWidth += expand(rect, w, h, mLp, z, rowWidth, mLeftPadding, mTopPadding)
                             + rect.width();
 
-                    String msg = String.format(Locale.getDefault(),"placement: %d %d %d %d",
-                            rect.left, rect.top, rect.right, rect.bottom);
+                    String msg = String.format(Locale.getDefault(),"placement: %d %d %d %d %d",
+                            index, rect.left, rect.top, rect.right, rect.bottom);
                     Log.d(TAG, msg);
 
                     Gravity.apply(gravity, w, h, rect, tempChildRect);
@@ -294,11 +310,11 @@ public class BreakLayout extends ViewGroup {
         }
 
         int getStdTop() {
-            return mLp.topMargin + getTop() + mTopPadding;
+            return mLp.topMargin + getTop() + mTopPadding + mVerticalMargin;
         }
 
         int getStdRight() {
-            return mLp.rightMargin + rect.left; // !!
+            return mLp.rightMargin + rect.left;
         }
 
         int getStdBottom() {
@@ -383,11 +399,16 @@ public class BreakLayout extends ViewGroup {
 
         @Override
         protected int expand(Rect fill, int w, int h, BreakLayoutParams lp, int i, int rowWidth, int pLeft, int pTop) {
-            int increase = getFreeSpace() / (getLength() - 1);
-            fill.top = lp.topMargin + getTop() + pTop;
-            fill.bottom = fill.top + h;
+            int length = getLength();
+            if (getLength() < 1) {
+                length = 3;
+                i++;
+            }
+            int increase = getFreeSpace() / (length - 1);
+            fill.top = getStdTop();
+            fill.bottom = getStdBottom() + h;
             if (i == 0) {
-                fill.left = lp.leftMargin + pLeft;
+                fill.left = getStdLeft() - rowWidth;
                 fill.right = getStdRight() + w;
             } else if (i == getLength() - 1) {
                 fill.left = getParentWidth() - (lp.leftMargin + pLeft + w);
