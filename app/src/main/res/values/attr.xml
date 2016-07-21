@@ -13,6 +13,7 @@
             <enum name="edge" value="3" />
             <enum name="as_is" value="4" />
         </attr>
+        <attr name="bl_vertical_margin" format="dimension"/>
     </declare-styleable>
 
 </resources>
