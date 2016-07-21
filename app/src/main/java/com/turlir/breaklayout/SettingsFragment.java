@@ -63,7 +63,7 @@ public class SettingsFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_menu_add)
+                .setIcon(android.R.drawable.ic_menu_edit)
                 .setTitle("Settings")
                 .setView(resolveView())
                 .create();

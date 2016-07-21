@@ -65,6 +65,5 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
                 target.removeViewAt(i);
             }
         }
-        target.invalidate();
     }
 }

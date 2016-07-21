@@ -114,16 +114,22 @@ public class BreakLayout extends ViewGroup {
         switch (mMode) {
             case MODE_RIGHT:
                 tmp = new RightMode(start, stop, row);
+                break;
             case MODE_LEFT:
                 tmp = new LeftMode(start, stop, row);
+                break;
             case MODE_CENTER:
                 tmp = new CenterMode(start, stop, row);
+                break;
             case MODE_EDGE:
                 tmp = new EdgeMode(start, stop, row);
+                break;
             case MODE_AS_IS:
                 tmp = new AsIsMode(start, stop, row);
+                break;
             default:
                 tmp = new RightMode(start, stop, row);
+                break;
         }
         tmp.setMiddleRowSpace(getMiddleRowSpace());
         return tmp;
@@ -166,7 +172,10 @@ public class BreakLayout extends ViewGroup {
     }
 
     public void setMode(int value) {
-        mMode = value;
+        if (value != mMode) {
+            mMode = value;
+            requestLayout();
+        }
     }
 
     public interface Mode {

@@ -12,7 +12,7 @@ public class EdgeMode extends SimpleMode {
     protected int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams layoutParams,
                          int indexViewInRow, int rowWidth, int pLeft, int pTop) {
         int length = getLength();
-        if (getLength() < 1) {
+        if (getLength() < 2) {
             length = 3;
             indexViewInRow++;
         }
