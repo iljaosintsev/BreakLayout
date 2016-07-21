@@ -1,10 +1,12 @@
-package com.turlir.breaklayout;
+package com.turlir.breaklayout.layout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.turlir.breaklayout.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,11 +92,10 @@ public class BreakLayout extends ViewGroup {
                 }
                 current.setFreeSpace(layoutWidth - rowWidth);
                 if (rows > 0) {
-                    current.setPreviousHeight(childMaxHeight);
+                    current.setPreviousHeight(childMaxHeight * rows);
                 }
             }
         }
-
         // compute parent height based on rows
         int parentHeight = childMaxHeight * (rows + 1);
         parentHeight += getPaddingTop() + getPaddingBottom();
@@ -158,6 +159,14 @@ public class BreakLayout extends ViewGroup {
 
     public int getMiddleRowSpace() {
         return mMiddleRowSpace;
+    }
+
+    public int getMode() {
+        return mMode;
+    }
+
+    public void setMode(int value) {
+        mMode = value;
     }
 
     public interface Mode {
