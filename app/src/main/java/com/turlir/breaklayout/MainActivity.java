@@ -1,9 +1,9 @@
 package com.turlir.breaklayout;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.BoringLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,19 +51,22 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
     @Override
     public void newValue(int c, int m) {
+        int tmp = target.getMode();
         target.setMode(m);
         if (c > target.getChildCount()) {
             View childAt = target.getChildAt(0);
             for (int i = 0; i < c - target.getChildCount(); i++) {
                 View v = new View(getApplicationContext());
                 v.setLayoutParams(childAt.getLayoutParams());
-                v.setBackgroundColor(getColor(R.color.primaryLight));
+                v.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 target.addView(v);
             }
-        } else {
+        } else if (c < target.getChildCount()) {
             for (int i = target.getChildCount() - 1; i >= c; i--) {
                 target.removeViewAt(i);
             }
+        } else if(tmp != m) {
+            target.requestLayout();
         }
     }
 }

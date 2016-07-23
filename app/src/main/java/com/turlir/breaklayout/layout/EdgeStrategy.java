@@ -2,9 +2,9 @@ package com.turlir.breaklayout.layout;
 
 import android.graphics.Rect;
 
-public class EdgeMode extends SimpleMode {
+public class EdgeStrategy extends AlignStrategy {
 
-    public EdgeMode(int start, int stop, int row) {
+    public EdgeStrategy(int start, int stop, int row) {
         super(start, stop, row);
     }
 

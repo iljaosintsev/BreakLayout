@@ -2,9 +2,9 @@ package com.turlir.breaklayout.layout;
 
 import android.graphics.Rect;
 
-public class RightMode extends SimpleMode {
+public class RightStrategy extends AlignStrategy {
 
-    public RightMode(int start, int stop, int row) {
+    public RightStrategy(int start, int stop, int row) {
         super(start, stop, row);
     }
 

@@ -2,9 +2,9 @@ package com.turlir.breaklayout.layout;
 
 import android.graphics.Rect;
 
-public class AsIsMode extends SimpleMode {
+public class AsIsStrategy extends AlignStrategy {
 
-    public AsIsMode(int start, int stop, int row) {
+    public AsIsStrategy(int start, int stop, int row) {
         super(start, stop, row);
     }
 

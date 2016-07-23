@@ -2,9 +2,9 @@ package com.turlir.breaklayout.layout;
 
 import android.graphics.Rect;
 
-public class CenterMode extends SimpleMode {
+public class CenterStrategy extends AlignStrategy {
 
-    public CenterMode(int start, int stop, int row) {
+    public CenterStrategy(int start, int stop, int row) {
         super(start, stop, row);
     }
 

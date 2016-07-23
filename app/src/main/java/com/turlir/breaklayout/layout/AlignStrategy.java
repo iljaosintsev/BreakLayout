@@ -5,27 +5,22 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
+public abstract class AlignStrategy implements BreakLayout.Strategy {
 
-public abstract class SimpleMode implements BreakLayout.Mode {
-
-    private final Rect tempChildRect = new Rect(), rect = new Rect();
     private BreakLayout.BreakLayoutParams mLayoutParams;
+    private final Rect mTempChildRect, mChildRect;
     private int mParentWidth, mFreeSpace;
     private int mStart, mStop, mLineIndex;
-    private int mRowWidth = 0;
+    private int mVerticalMargin, mMiddleRowSpace;
+    private int mRowWidth;
     private int mLeftPadding, mTopPadding;
-    private int mVerticalMargin;
-    private float mMiddleRowSpace;
 
-    public SimpleMode(int start, int stop, int lineIndex) {
+    public AlignStrategy(int start, int stop, int lineIndex) {
         mStart = start;
         mStop = stop;
         mLineIndex = lineIndex;
-    }
-
-    @Override
-    public void setPreviousHeight(int previousHeight) {
-        mVerticalMargin = previousHeight;
+        mTempChildRect = new Rect();
+        mChildRect = new Rect();
     }
 
     @Override
@@ -39,25 +34,23 @@ public abstract class SimpleMode implements BreakLayout.Mode {
             View child = parent.getChildAt(i);
             if (child.getVisibility() != View.GONE) {
                 mLayoutParams = (BreakLayout.BreakLayoutParams) child.getLayoutParams();
-                int w = child.getMeasuredWidth();
-                int h = child.getMeasuredHeight();
+                int width = child.getMeasuredWidth();
+                int height = child.getMeasuredHeight();
 
-                int z = i - getStart();
-                mRowWidth += expand(rect, w, h, mLayoutParams, z, mRowWidth, mLeftPadding, mTopPadding)
-                        + rect.width();
+                int index = i - getStart();
+                int delta = expand(mChildRect, width, height, mLayoutParams, index,
+                        mRowWidth, mLeftPadding, mTopPadding);
+                mRowWidth += delta + mChildRect.width();
 
-                Gravity.apply(gravity, w, h, rect, tempChildRect);
-                child.layout(tempChildRect.left, tempChildRect.top, tempChildRect.right, tempChildRect.bottom);
+                Gravity.apply(gravity, width, height, mChildRect, mTempChildRect);
+                child.layout(mTempChildRect.left, mTempChildRect.top, mTempChildRect.right,
+                        mTempChildRect.bottom);
             }
         }
     }
 
     protected abstract int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams lp, int i,
                                   int rowWidth, int pLeft, int pTop);
-
-    public int getTop() {
-        return (int) (mLineIndex * mMiddleRowSpace);
-    }
 
     public int getParentWidth() {
         return mParentWidth;
@@ -91,8 +84,9 @@ public abstract class SimpleMode implements BreakLayout.Mode {
         mStop = i;
     }
 
-    public int getLength() {
-        return getStop() - getStart();
+    @Override
+    public int getMiddleRowSpace() {
+        return mMiddleRowSpace;
     }
 
     @Override
@@ -100,20 +94,38 @@ public abstract class SimpleMode implements BreakLayout.Mode {
         mMiddleRowSpace = middleRowSpace;
     }
 
-    int getStdLeft() {
+    @Override
+    public int getPreviousHeight() {
+        return mVerticalMargin;
+    }
+
+    @Override
+    public void setPreviousHeight(int previousHeight) {
+        mVerticalMargin = previousHeight;
+    }
+
+    protected int getTop() {
+        return mLineIndex * mMiddleRowSpace;
+    }
+
+    protected int getLength() {
+        return getStop() - getStart();
+    }
+
+    protected int getStdLeft() {
         return mLayoutParams.leftMargin + mLeftPadding + mRowWidth;
     }
 
-    int getStdTop() {
+    protected int getStdTop() {
         return mLayoutParams.topMargin + getTop() + mTopPadding + mVerticalMargin;
     }
 
-    int getStdRight() {
-        return mLayoutParams.rightMargin + rect.left;
+    protected int getStdRight() {
+        return mLayoutParams.rightMargin + mChildRect.left;
     }
 
-    int getStdBottom() {
-        return rect.top;
+    protected int getStdBottom() {
+        return mChildRect.top;
     }
 
 }

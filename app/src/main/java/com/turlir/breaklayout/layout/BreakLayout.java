@@ -22,7 +22,7 @@ public class BreakLayout extends ViewGroup {
     private int mMode;
     private int mMiddleRowSpace;
 
-    private Map<Integer, Mode> mStrategy = new HashMap<>();
+    private Map<Integer, Strategy> mStrategy = new HashMap<>();
 
     public BreakLayout(Context context) {
         super(context);
@@ -30,7 +30,6 @@ public class BreakLayout extends ViewGroup {
 
     public BreakLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BreakLayout);
         try {
             mMode = a.getInteger(R.styleable.BreakLayout_bl_mode, MODE_RIGHT);
@@ -50,13 +49,12 @@ public class BreakLayout extends ViewGroup {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         mStrategy.clear();
-
         int childMaxHeight = 0;
         int layoutWidth = getMeasuredWidth();
         int childState = 0;
         int rowWidth = 0;
         int rows = 0;
-        int k = 0;
+        int firstChildInRow = 0;
 
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
@@ -65,26 +63,26 @@ public class BreakLayout extends ViewGroup {
                 childState = combineMeasuredStates(childState, child.getMeasuredState());
 
                 BreakLayoutParams lp = (BreakLayoutParams) child.getLayoutParams();
-                final int height = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
+                final int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
                 final int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
 
-                // determine max height
-                if (height > childMaxHeight) {
-                    childMaxHeight = height;
+                // determine max childHeight
+                if (childHeight > childMaxHeight) {
+                    childMaxHeight = childHeight;
                 }
 
                 // check if child does not fit into current mRowWidth
                 if (rowWidth + childWidth > layoutWidth && i != 0) {
                     rowWidth = 0;
                     rows++;
-                    k = i;
+                    firstChildInRow = i;
                 }
 
                 rowWidth += childWidth;
 
-                Mode current = mStrategy.get(rows);
+                Strategy current = mStrategy.get(rows);
                 if (current == null) {
-                    current = selectMode(k, i + 1, rows);
+                    current = selectMode(firstChildInRow, i + 1, rows);
                     current.setParentWidth(layoutWidth);
                     mStrategy.put(rows, current);
                 } else {
@@ -96,6 +94,7 @@ public class BreakLayout extends ViewGroup {
                 }
             }
         }
+
         // compute parent height based on rows
         int parentHeight = childMaxHeight * (rows + 1);
         parentHeight += getPaddingTop() + getPaddingBottom();
@@ -109,37 +108,11 @@ public class BreakLayout extends ViewGroup {
         setMeasuredDimension(measuredWidth, measuredHeight);
     }
 
-    private Mode selectMode(int start, int stop, int row) {
-        Mode tmp;
-        switch (mMode) {
-            case MODE_RIGHT:
-                tmp = new RightMode(start, stop, row);
-                break;
-            case MODE_LEFT:
-                tmp = new LeftMode(start, stop, row);
-                break;
-            case MODE_CENTER:
-                tmp = new CenterMode(start, stop, row);
-                break;
-            case MODE_EDGE:
-                tmp = new EdgeMode(start, stop, row);
-                break;
-            case MODE_AS_IS:
-                tmp = new AsIsMode(start, stop, row);
-                break;
-            default:
-                tmp = new RightMode(start, stop, row);
-                break;
-        }
-        tmp.setMiddleRowSpace(getMiddleRowSpace());
-        return tmp;
-    }
-
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < mStrategy.size(); i++) {
-            Mode mode = mStrategy.get(i);
-            mode.placement(this);
+            Strategy strategy = mStrategy.get(i);
+            strategy.placement(this);
         }
     }
 
@@ -167,18 +140,45 @@ public class BreakLayout extends ViewGroup {
         return mMiddleRowSpace;
     }
 
+    public void setMiddleRowSpace(int value) {
+        mMiddleRowSpace = value;
+    }
+
     public int getMode() {
         return mMode;
     }
 
     public void setMode(int value) {
-        if (value != mMode) {
-            mMode = value;
-            requestLayout();
-        }
+        mMode = value;
     }
 
-    public interface Mode {
+    private Strategy selectMode(int start, int stop, int row) {
+        Strategy tmp;
+        switch (mMode) {
+            case MODE_RIGHT:
+                tmp = new RightStrategy(start, stop, row);
+                break;
+            case MODE_LEFT:
+                tmp = new LeftStrategy(start, stop, row);
+                break;
+            case MODE_CENTER:
+                tmp = new CenterStrategy(start, stop, row);
+                break;
+            case MODE_EDGE:
+                tmp = new EdgeStrategy(start, stop, row);
+                break;
+            case MODE_AS_IS:
+                tmp = new AsIsStrategy(start, stop, row);
+                break;
+            default:
+                tmp = new RightStrategy(start, stop, row);
+                break;
+        }
+        tmp.setMiddleRowSpace(getMiddleRowSpace());
+        return tmp;
+    }
+
+    public interface Strategy {
 
         int getParentWidth();
 
@@ -196,7 +196,11 @@ public class BreakLayout extends ViewGroup {
 
         void setStop(int i);
 
+        int getPreviousHeight();
+
         void setPreviousHeight(int previousHeight);
+
+        int getMiddleRowSpace();
 
         void setMiddleRowSpace(int middleRowSpace);
 
