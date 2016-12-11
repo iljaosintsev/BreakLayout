@@ -9,7 +9,7 @@ public class AsIsStrategy extends AlignStrategy {
     }
 
     @Override
-    protected int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams layoutParams,
+    protected int expand(Rect fill, int w, int h, BreakLayoutParams layoutParams,
                          int indexViewInRow, int rowWidth, int pLeft, int pTop) {
         fill.left = getStdLeft();
         fill.top = getStdTop();

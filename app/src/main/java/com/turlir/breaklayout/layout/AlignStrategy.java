@@ -5,9 +5,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class AlignStrategy implements BreakLayout.Strategy {
+public abstract class AlignStrategy implements Strategy {
 
-    private BreakLayout.BreakLayoutParams mLayoutParams;
+    private BreakLayoutParams mLayoutParams;
     private final Rect mTempChildRect, mChildRect;
     private int mParentWidth, mFreeSpace;
     private int mStart, mStop, mLineIndex;
@@ -33,7 +33,7 @@ public abstract class AlignStrategy implements BreakLayout.Strategy {
         for (int i = getStart(); i < getStop(); i++) {
             View child = parent.getChildAt(i);
             if (child.getVisibility() != View.GONE) {
-                mLayoutParams = (BreakLayout.BreakLayoutParams) child.getLayoutParams();
+                mLayoutParams = (BreakLayoutParams) child.getLayoutParams();
                 int width = child.getMeasuredWidth();
                 int height = child.getMeasuredHeight();
 
@@ -49,7 +49,7 @@ public abstract class AlignStrategy implements BreakLayout.Strategy {
         }
     }
 
-    protected abstract int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams lp, int i,
+    protected abstract int expand(Rect fill, int w, int h, BreakLayoutParams lp, int i,
                                   int rowWidth, int pLeft, int pTop);
 
     public int getParentWidth() {

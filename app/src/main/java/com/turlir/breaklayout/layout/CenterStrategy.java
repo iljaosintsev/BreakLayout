@@ -9,7 +9,7 @@ public class CenterStrategy extends AlignStrategy {
     }
 
     @Override
-    protected int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams layoutParams,
+    protected int expand(Rect fill, int w, int h, BreakLayoutParams layoutParams,
                          int indexViewInRow, int rowWidth, int pLeft, int pTop) {
         int length = getStop() - getStart();
         int increase = getFreeSpace() / (length + 1);

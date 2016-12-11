@@ -9,7 +9,7 @@ public class LeftStrategy extends AlignStrategy {
     }
 
     @Override
-    protected int expand(Rect fill, int w, int h, BreakLayout.BreakLayoutParams layoutParams,
+    protected int expand(Rect fill, int w, int h, BreakLayoutParams layoutParams,
                          int indexViewInRow, int rowWidth, int pLeft, int pTop) {
         int increase = getFreeSpace() / getLength();
         fill.top = getStdTop();
