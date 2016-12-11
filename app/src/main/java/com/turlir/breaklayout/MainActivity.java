@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.turlir.breaklayout.layout.BreakLayout;
+import com.turlir.breaklayout.layout.Mode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +26,8 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        Toolbar t = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(t);
     }
 
     @Override
@@ -45,12 +46,16 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
     }
 
     private void openSettingsDialog() {
-        SettingsDialog frg = SettingsDialog.newInstance(target.getChildCount(), target.getMode());
+        Mode current = new Mode(target.getMode(), target.getChildCount());
+        SettingsDialog frg = SettingsDialog.newInstance(Mode.MODES, current);
         frg.show(getFragmentManager(), null);
     }
 
     @Override
-    public void newValue(int c, int m) {
+    public void newMode(Mode n) {
+        int m = n.getId();
+        int c = n.getCount();
+        // old algorithm
         int tmp = target.getMode();
         target.setMode(m);
         if (c > target.getChildCount()) {
@@ -69,4 +74,5 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
             target.requestLayout();
         }
     }
+
 }

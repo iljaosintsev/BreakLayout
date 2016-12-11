@@ -1,5 +1,6 @@
 package com.turlir.breaklayout;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,51 +9,47 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.turlir.breaklayout.layout.BreakLayout;
-
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.turlir.breaklayout.layout.Incrementable;
+import com.turlir.breaklayout.layout.Mode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 public class SettingsDialog extends DialogFragment {
 
+    private static final String
+            ALL = "ALL",
+            CURRENT = "CURRENT";
+
     @BindView(R.id.settings_child)
-    TextView count;
+    TextView tvCount;
 
     @BindView(R.id.settings_spinner)
-    Spinner mode;
+    Spinner spinModes;
 
     private Callback mCallback;
-    private int mCount, mMode;
 
-    private static final Map<String, Integer> sMap;
-    private static final String[] sKeys;
-    private static final Integer[] sValue;
-    static {
-        sMap = new LinkedHashMap<>();
-        sMap.put("RIGHT", BreakLayout.MODE_RIGHT);
-        sMap.put("LEFT", BreakLayout.MODE_LEFT);
-        sMap.put("CENTER", BreakLayout.MODE_CENTER);
-        sMap.put("EDGE", BreakLayout.MODE_EDGE);
-        sMap.put("AS_IS", BreakLayout.MODE_AS_IS);
+    private Mode[] mAllModes;
+    private int mIndex = -1;
+    private CountChangedListener mCountListener;
 
-        sKeys = sMap.keySet().toArray(new String[sMap.size()]);
-        sValue = sMap.values().toArray(new Integer[sMap.size()]);
-    }
+    private DialogInterface.OnClickListener mCancel = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            // TODO reset to begin state (count)
+        }
+    };
 
-    public static SettingsDialog newInstance(int c, int m) {
+    public static SettingsDialog newInstance(Mode[] allModes, Mode current) {
         Bundle args = new Bundle();
-        args.putInt("C", c);
-        args.putInt("M", m);
+        args.putParcelableArray(ALL, allModes);
+        args.putParcelable(CURRENT, current);
         SettingsDialog settingsDialog = new SettingsDialog();
         settingsDialog.setArguments(args);
         return settingsDialog;
@@ -60,10 +57,27 @@ public class SettingsDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mAllModes = (Mode[]) getArguments().getParcelableArray(ALL);
+        Mode mCurrentMode = getArguments().getParcelable(CURRENT);
+        for (int i = 0; i < mAllModes.length; i++) {
+            if (mAllModes[i].equals(mCurrentMode)) {
+                mIndex = i;
+                break;
+            }
+        }
+        // build dialog
         return new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_menu_edit)
-                .setTitle("Settings")
-                .setView(resolveView())
+                .setTitle(R.string.dialog_settings)
+                .setView(createView())
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Mode c = mAllModes[getCurrentModeIndex()];
+                        mCallback.newMode(c);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, mCancel)
                 .create();
     }
 
@@ -72,66 +86,71 @@ public class SettingsDialog extends DialogFragment {
         super.onAttach(activity);
         if (activity instanceof Callback) {
             mCallback = (Callback) activity;
+        } else {
+            throw new IllegalArgumentException("activity must implement callback");
         }
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        mCallback.newValue(mCount, getPosition());
+        mCancel.onClick(dialog, 0);
     }
-
-    private View resolveView() {
-        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
-        View root = inflater.inflate(R.layout.dialog_settings, null);
-        ButterKnife.bind(this, root);
-        mCount = getArguments().getInt("C");
-        mMode = getArguments().getInt("M");
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1, sKeys);
-        mode.setAdapter(mAdapter);
-        mode.setSelection(getPosition());
-        mode.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mMode = position;
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-        update();
-        return root;
-    }
-
 
     @OnClick(R.id.settings_btn_plus)
     public void plus() {
-        mCount++;
-        mCount = Math.min(mCount, 10);
-        update();
+        getCurrentMode().inc();
+        mCountListener.onCountChanged();
     }
 
     @OnClick(R.id.settings_btn_minus)
     public void minus() {
-        mCount--;
-        mCount = Math.max(mCount, 1);
-        update();
+        getCurrentMode().dec();
+        mCountListener.onCountChanged();
     }
 
-    private void update() {
-        count.setText(String.valueOf(mCount));
+    @OnItemSelected(R.id.settings_spinner)
+    public void modeSelected(int position) {
+        mIndex = position;
     }
 
-    private int getPosition() {
-        return Arrays.binarySearch(sValue, mMode);
+    private View createView() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+        @SuppressLint("InflateParams")
+        View root = inflater.inflate(R.layout.dialog_settings, null);
+        ButterKnife.bind(this, root);
+        bindView();
+        return root;
+    }
+
+    private void bindView() {
+        ArrayAdapter<Mode> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                android.R.layout.simple_list_item_1, mAllModes);
+        spinModes.setAdapter(adapter);
+        spinModes.setSelection(getCurrentModeIndex());
+        mCountListener = new CountChangedListener() {
+            @Override
+            public void onCountChanged() {
+                tvCount.setText(String.valueOf(getCurrentMode().getCount()));
+            }
+        };
+        mCountListener.onCountChanged();
+    }
+
+    private int getCurrentModeIndex() {
+        return mIndex;
+    }
+
+    private Incrementable getCurrentMode() {
+        return mAllModes[getCurrentModeIndex()];
     }
 
     public interface Callback {
-        void newValue(int c, int m);
+        void newMode(Mode m);
+    }
+
+    private interface CountChangedListener {
+        void onCountChanged();
     }
 
 }
