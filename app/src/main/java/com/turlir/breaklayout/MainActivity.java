@@ -14,7 +14,7 @@ import com.turlir.breaklayout.layout.BreakLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements SettingsFragment.Callback {
+public class MainActivity extends AppCompatActivity implements SettingsDialog.Callback {
 
     @BindView(R.id.target)
     BreakLayout target;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     }
 
     private void openSettingsDialog() {
-        SettingsFragment frg = SettingsFragment.newInstance(target.getChildCount(), target.getMode());
+        SettingsDialog frg = SettingsDialog.newInstance(target.getChildCount(), target.getMode());
         frg.show(getFragmentManager(), null);
     }
 

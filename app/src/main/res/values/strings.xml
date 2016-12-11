@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">BreakLayout</string>
     <string name="settings">Настройки</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="_zero">0</string>
 </resources>

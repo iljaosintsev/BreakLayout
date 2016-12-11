@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.turlir.breaklayout.layout.BreakLayout;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SettingsFragment extends DialogFragment {
+public class SettingsDialog extends DialogFragment {
 
     @BindView(R.id.settings_child)
     TextView count;
@@ -51,23 +49,22 @@ public class SettingsFragment extends DialogFragment {
         sValue = sMap.values().toArray(new Integer[sMap.size()]);
     }
 
-    public static SettingsFragment newInstance(int c, int m) {
+    public static SettingsDialog newInstance(int c, int m) {
         Bundle args = new Bundle();
         args.putInt("C", c);
         args.putInt("M", m);
-        SettingsFragment settingsFragment = new SettingsFragment();
-        settingsFragment.setArguments(args);
-        return settingsFragment;
+        SettingsDialog settingsDialog = new SettingsDialog();
+        settingsDialog.setArguments(args);
+        return settingsDialog;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_menu_edit)
                 .setTitle("Settings")
                 .setView(resolveView())
                 .create();
-        return dialog;
     }
 
     @Override
@@ -86,7 +83,7 @@ public class SettingsFragment extends DialogFragment {
 
     private View resolveView() {
         LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
-        View root = inflater.inflate(R.layout.fragment_settings, null);
+        View root = inflater.inflate(R.layout.dialog_settings, null);
         ButterKnife.bind(this, root);
         mCount = getArguments().getInt("C");
         mMode = getArguments().getInt("M");
