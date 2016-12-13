@@ -1,8 +1,7 @@
 package com.turlir.breaklayout;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import com.turlir.breaklayout.layout.Mode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements SettingsDialog.Callback {
+public class MainActivity extends Activity implements SettingsDialog.Callback {
 
     private static final Mode[] MODES = new Mode[]{
             new Mode(BreakLayout.MODE_RIGHT),
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
             for (int i = 0; i < c - target.getChildCount(); i++) {
                 View v = new View(getApplicationContext());
                 v.setLayoutParams(childAt.getLayoutParams());
-                v.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                v.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 target.addView(v);
             }
         } else if (c < target.getChildCount()) {
