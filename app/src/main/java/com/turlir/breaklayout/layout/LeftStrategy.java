@@ -11,16 +11,20 @@ public class LeftStrategy extends AlignStrategy {
     @Override
     protected int expand(Rect fill, int w, int h, BreakLayoutParams layoutParams,
                          int indexViewInRow, int rowWidth, int pLeft, int pTop) {
-        int increase = getFreeSpace() / getLength();
-        fill.top = getStdTop();
-        fill.bottom = getStdBottom() + h;
-        if (indexViewInRow != getLength() - 1) {
-            fill.left = getStdLeft() + increase;
-            fill.right = getStdRight() + w;
+        int increase = getFreeSpace() / (getLength());
+
+        if (indexViewInRow > 0) {
+            fill.left = increase;
         } else {
-            fill.left = getParentWidth() - (layoutParams.leftMargin + pLeft + w);
-            fill.right = getParentWidth();
+            fill.left = 0;
         }
-        return (increase * (indexViewInRow + 1));
+
+        fill.left += getStdLeft();
+        fill.top = getStdTop();
+        fill.right = getStdRight() + w;
+        fill.bottom = getStdBottom() + h;
+
+        return (increase * indexViewInRow);
     }
+
 }

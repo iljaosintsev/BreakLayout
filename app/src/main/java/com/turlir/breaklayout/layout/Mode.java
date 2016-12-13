@@ -14,10 +14,10 @@ public class Mode implements Incrementable, Parcelable {
         @Override
         public String map(int mode) {
             switch (mode) {
-                case BreakLayout.MODE_RIGHT:
-                    return "RIGHT";
                 case BreakLayout.MODE_LEFT:
                     return "LEFT";
+                case BreakLayout.MODE_RIGHT:
+                    return "RIGHT";
                 case BreakLayout.MODE_CENTER:
                     return "CENTER";
                 case BreakLayout.MODE_EDGE:

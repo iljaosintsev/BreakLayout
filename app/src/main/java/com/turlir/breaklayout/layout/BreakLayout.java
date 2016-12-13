@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class BreakLayout extends ViewGroup {
 
-    public static final int MODE_RIGHT = 0;
-    public static final int MODE_LEFT = 1;
+    public static final int MODE_LEFT = 0;
+    public static final int MODE_RIGHT = 1;
     public static final int MODE_CENTER = 2;
     public static final int MODE_EDGE = 3;
     public static final int MODE_AS_IS = 4;
@@ -32,7 +32,7 @@ public class BreakLayout extends ViewGroup {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BreakLayout);
         try {
-            mMode = a.getInteger(R.styleable.BreakLayout_bl_mode, MODE_RIGHT);
+            mMode = a.getInteger(R.styleable.BreakLayout_bl_mode, MODE_LEFT);
             mMiddleRowSpace = (int) a.getDimension(R.styleable.BreakLayout_bl_vertical_margin, 0);
         } finally {
             a.recycle();
@@ -155,11 +155,11 @@ public class BreakLayout extends ViewGroup {
     private Strategy selectMode(int start, int stop, int row) {
         Strategy tmp;
         switch (mMode) {
-            case MODE_RIGHT:
-                tmp = new RightStrategy(start, stop, row);
-                break;
             case MODE_LEFT:
                 tmp = new LeftStrategy(start, stop, row);
+                break;
+            case MODE_RIGHT:
+                tmp = new RighStrategy(start, stop, row);
                 break;
             case MODE_CENTER:
                 tmp = new CenterStrategy(start, stop, row);
@@ -171,7 +171,7 @@ public class BreakLayout extends ViewGroup {
                 tmp = new AsIsStrategy(start, stop, row);
                 break;
             default:
-                tmp = new RightStrategy(start, stop, row);
+                tmp = new LeftStrategy(start, stop, row);
                 break;
         }
         tmp.setMiddleRowSpace(getMiddleRowSpace());
