@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.turlir.breaklayout.BreakLayout;
 import com.turlir.breaklayout.Incrementable;
 
-public class Model implements Incrementable, Parcelable {
+class Model implements Incrementable, Parcelable {
 
     private static final int
             MIN = 2,
@@ -37,19 +37,19 @@ public class Model implements Incrementable, Parcelable {
     private int mId;
     private int mCount;
 
-    public Model(int id) {
+    Model(int id) {
         this(MAPPER.map(id), id);
     }
 
-    public Model(int id, int count) {
+    Model(int id, int count) {
         this(MAPPER.map(id), id, count);
     }
 
-    public Model(@NonNull String mode, int id) {
+    private Model(@NonNull String mode, int id) {
         this(mode, id, 2);
     }
 
-    public Model(@NonNull String mode, int id, int count) {
+    private Model(@NonNull String mode, int id, int count) {
         this.mode = mode;
         mId = id;
         if (count < MIN || count > MAX) {
