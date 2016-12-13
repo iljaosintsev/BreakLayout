@@ -113,7 +113,7 @@ public class SettingsDialog extends DialogFragment {
     }
 
     private void bindView() {
-        ArrayAdapter<Mode> adapter = new ArrayAdapter<>(getActivity(),
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, mAllModes);
         spinModes.setAdapter(adapter);
         spinModes.setSelection(mIndex);
