@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 
 public class Mode implements Incrementable, Parcelable {
 
+    private static final int
+            MIN = 2,
+            MAX = 6;
+
     private static final NameMapper MAPPER = new NameMapper() {
         @Override
         public String map(int mode) {
@@ -46,7 +50,7 @@ public class Mode implements Incrementable, Parcelable {
     public Mode(@NonNull String mode, int id, int count) {
         this.mode = mode;
         mId = id;
-        if (count < 1) {
+        if (count < MIN || count > MAX) {
             throw new IllegalArgumentException("count must be greater 2");
         }
         mCount = count;
@@ -57,7 +61,7 @@ public class Mode implements Incrementable, Parcelable {
 
     @Override
     public boolean isInc() {
-        return mCount < 6; // 0 1 2 3 4 5
+        return mCount < MAX; // 0 1 2 3 4 5
     }
 
     @Override
@@ -70,7 +74,7 @@ public class Mode implements Incrementable, Parcelable {
 
     @Override
     public boolean isDec() {
-        return mCount > 2; // 2 3 4 5 6 7
+        return mCount > MIN; // 2 3 4 5 6 7
     }
 
     @Override
