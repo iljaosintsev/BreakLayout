@@ -3,15 +3,10 @@ package com.turlir.breaklayout;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.turlir.breaklayout.layout.BreakLayout;
 import com.turlir.breaklayout.layout.Mode;
@@ -21,7 +16,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements SettingsDialog.Callback {
 
-    private static final Mode[] MODES = new Mode[] {
+    private static final Mode[] MODES = new Mode[]{
             new Mode(BreakLayout.MODE_RIGHT),
             new Mode(BreakLayout.MODE_LEFT),
             new Mode(BreakLayout.MODE_CENTER),
@@ -79,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
             for (int i = target.getChildCount() - 1; i >= c; i--) {
                 target.removeViewAt(i);
             }
-        } else if(tmp != m) {
+        } else if (tmp != m) {
             target.requestLayout();
         }
     }
