@@ -17,6 +17,14 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements SettingsDialog.Callback {
 
+    private static final Mode[] MODES = new Mode[] {
+            new Mode(BreakLayout.MODE_RIGHT),
+            new Mode(BreakLayout.MODE_LEFT),
+            new Mode(BreakLayout.MODE_CENTER),
+            new Mode(BreakLayout.MODE_EDGE),
+            new Mode(BreakLayout.MODE_AS_IS),
+    };
+
     @BindView(R.id.target)
     BreakLayout target;
 
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
 
     private void openSettingsDialog() {
         Mode current = new Mode(target.getMode(), target.getChildCount());
-        SettingsDialog frg = SettingsDialog.newInstance(Mode.MODES, current);
+        SettingsDialog frg = SettingsDialog.newInstance(MODES, current);
         frg.show(getFragmentManager(), null);
     }
 

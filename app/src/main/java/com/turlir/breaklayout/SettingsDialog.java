@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.turlir.breaklayout.layout.Incrementable;
 import com.turlir.breaklayout.layout.Mode;
 
 import butterknife.BindView;
@@ -34,33 +33,27 @@ public class SettingsDialog extends DialogFragment {
     Spinner spinModes;
 
     private Callback mCallback;
-
-    private Mode[] mAllModes;
-    private int mIndex = -1;
     private CountChangedListener mCountListener;
 
-    private DialogInterface.OnClickListener mCancel = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            // TODO reset to begin state (count)
-        }
-    };
+    private Mode[] mAllModes;
+    private Mode mCurrentMode;
+    private int mIndex = -1;
 
     public static SettingsDialog newInstance(Mode[] allModes, Mode current) {
         Bundle args = new Bundle();
         args.putParcelableArray(ALL, allModes);
         args.putParcelable(CURRENT, current);
-        SettingsDialog settingsDialog = new SettingsDialog();
-        settingsDialog.setArguments(args);
-        return settingsDialog;
+        SettingsDialog instance = new SettingsDialog();
+        instance.setArguments(args);
+        return instance;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mAllModes = (Mode[]) getArguments().getParcelableArray(ALL);
-        Mode mCurrentMode = getArguments().getParcelable(CURRENT);
-        for (int i = 0; i < mAllModes.length; i++) {
-            if (mAllModes[i].equals(mCurrentMode)) {
+        mCurrentMode = getArguments().getParcelable(CURRENT);
+        for (int i = 0; i < mAllModes.length && mCurrentMode != null; i++) {
+            if (mAllModes[i].equals(mCurrentMode)) { // id
                 mIndex = i;
                 break;
             }
@@ -73,11 +66,10 @@ public class SettingsDialog extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Mode c = mAllModes[getCurrentModeIndex()];
-                        mCallback.newMode(c);
+                        mCallback.newMode(mCurrentMode);
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, mCancel)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
     }
 
@@ -89,12 +81,6 @@ public class SettingsDialog extends DialogFragment {
         } else {
             throw new IllegalArgumentException("activity must implement callback");
         }
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        mCancel.onClick(dialog, 0);
     }
 
     @OnClick(R.id.settings_btn_plus)
@@ -112,6 +98,9 @@ public class SettingsDialog extends DialogFragment {
     @OnItemSelected(R.id.settings_spinner)
     public void modeSelected(int position) {
         mIndex = position;
+        int id = mAllModes[mIndex].getId();
+        int count = mCurrentMode.getCount();
+        mCurrentMode = new Mode(id, count);
     }
 
     private View createView() {
@@ -127,7 +116,7 @@ public class SettingsDialog extends DialogFragment {
         ArrayAdapter<Mode> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_1, mAllModes);
         spinModes.setAdapter(adapter);
-        spinModes.setSelection(getCurrentModeIndex());
+        spinModes.setSelection(mIndex);
         mCountListener = new CountChangedListener() {
             @Override
             public void onCountChanged() {
@@ -137,12 +126,8 @@ public class SettingsDialog extends DialogFragment {
         mCountListener.onCountChanged();
     }
 
-    private int getCurrentModeIndex() {
-        return mIndex;
-    }
-
-    private Incrementable getCurrentMode() {
-        return mAllModes[getCurrentModeIndex()];
+    private Mode getCurrentMode() {
+        return mCurrentMode;
     }
 
     public interface Callback {

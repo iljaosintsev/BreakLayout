@@ -26,16 +26,9 @@ public class Mode implements Incrementable, Parcelable {
         }
     };
 
-    public static final Mode[] MODES = new Mode[] {
-            new Mode(BreakLayout.MODE_RIGHT),
-            new Mode(BreakLayout.MODE_LEFT),
-            new Mode(BreakLayout.MODE_CENTER),
-            new Mode(BreakLayout.MODE_EDGE),
-            new Mode(BreakLayout.MODE_AS_IS),
-    };
-
     public final String mode;
     private int mId;
+    private int mInitialCount;
     private int mCount;
 
     public Mode(int id) {
@@ -57,6 +50,7 @@ public class Mode implements Incrementable, Parcelable {
             throw new IllegalArgumentException("count must be greater 2");
         }
         mCount = count;
+        mInitialCount = mCount;
     }
 
     //<editor-fold desc="Incrementable">
@@ -94,7 +88,7 @@ public class Mode implements Incrementable, Parcelable {
 
     @Override
     public void reset() {
-        mCount = 2;
+        mCount = mInitialCount;
     }
 
     //</editor-fold>
