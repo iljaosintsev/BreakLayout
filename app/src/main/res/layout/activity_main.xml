@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.turlir.breaklayout.MainActivity">
+    tools:context="com.turlir.example.MainActivity">
 
-    <com.turlir.breaklayout.layout.BreakLayout
+    <com.turlir.breaklayout.BreakLayout
         android:id="@+id/target"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +26,6 @@
             android:layout_height="100dp"
             android:background="#8E24AA" />
 
-    </com.turlir.breaklayout.layout.BreakLayout>
+    </com.turlir.breaklayout.BreakLayout>
 
 </LinearLayout>

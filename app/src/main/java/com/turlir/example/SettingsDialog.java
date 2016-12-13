@@ -1,4 +1,4 @@
-package com.turlir.breaklayout;
+package com.turlir.example;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.turlir.breaklayout.layout.Mode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,8 +1,10 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.example;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import com.turlir.breaklayout.BreakLayout;
+import com.turlir.breaklayout.Incrementable;
 
 public class Mode implements Incrementable, Parcelable {
 
@@ -42,11 +44,11 @@ public class Mode implements Incrementable, Parcelable {
         this(MAPPER.map(id), id, count);
     }
 
-    public Mode(@NonNull String mode, int id) {
+    public Mode(String mode, int id) {
         this(mode, id, 2);
     }
 
-    public Mode(@NonNull String mode, int id, int count) {
+    public Mode(String mode, int id, int count) {
         this.mode = mode;
         mId = id;
         if (count < MIN || count > MAX) {

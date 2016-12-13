@@ -1,4 +1,4 @@
-package com.turlir.breaklayout;
+package com.turlir.example;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,8 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.turlir.breaklayout.layout.BreakLayout;
-import com.turlir.breaklayout.layout.Mode;
+import com.turlir.breaklayout.BreakLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

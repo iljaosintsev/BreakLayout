@@ -1,12 +1,10 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.breaklayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.turlir.breaklayout.R;
 
 import java.util.HashMap;
 import java.util.Map;

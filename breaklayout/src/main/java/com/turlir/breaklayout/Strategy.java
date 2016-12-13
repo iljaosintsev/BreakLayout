@@ -1,4 +1,4 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.breaklayout;
 
 import android.view.ViewGroup;
 
@@ -29,4 +29,5 @@ public interface Strategy {
     void setMiddleRowSpace(int middleRowSpace);
 
     void placement(ViewGroup parent);
+
 }

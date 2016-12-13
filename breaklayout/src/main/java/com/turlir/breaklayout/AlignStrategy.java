@@ -1,4 +1,4 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.breaklayout;
 
 import android.graphics.Rect;
 import android.view.Gravity;

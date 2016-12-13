@@ -1,4 +1,4 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.breaklayout;
 
 import android.content.Context;
 import android.util.AttributeSet;

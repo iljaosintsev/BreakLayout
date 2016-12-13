@@ -1,4 +1,4 @@
-package com.turlir.breaklayout.layout;
+package com.turlir.breaklayout;
 
 public interface Incrementable {
 
