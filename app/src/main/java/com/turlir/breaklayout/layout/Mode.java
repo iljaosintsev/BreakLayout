@@ -30,9 +30,8 @@ public class Mode implements Incrementable, Parcelable {
         }
     };
 
-    public final String mode;
+    private final String mode;
     private int mId;
-    private int mInitialCount;
     private int mCount;
 
     public Mode(int id) {
@@ -54,7 +53,6 @@ public class Mode implements Incrementable, Parcelable {
             throw new IllegalArgumentException("count must be greater 2");
         }
         mCount = count;
-        mInitialCount = mCount;
     }
 
     //<editor-fold desc="Incrementable">
@@ -88,11 +86,6 @@ public class Mode implements Incrementable, Parcelable {
     @Override
     public int getCount() {
         return mCount;
-    }
-
-    @Override
-    public void reset() {
-        mCount = mInitialCount;
     }
 
     //</editor-fold>

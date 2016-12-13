@@ -12,6 +12,4 @@ public interface Incrementable {
 
     int getCount();
 
-    void reset();
-
 }
