@@ -104,7 +104,7 @@ public class SettingsDialog extends DialogFragment {
     }
 
     private View createView() {
-        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
         @SuppressLint("InflateParams")
         View root = inflater.inflate(R.layout.dialog_settings, null);
         ButterKnife.bind(this, root);
@@ -113,7 +113,7 @@ public class SettingsDialog extends DialogFragment {
     }
 
     private void bindView() {
-        ArrayAdapter<Mode> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+        ArrayAdapter<Mode> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, mAllModes);
         spinModes.setAdapter(adapter);
         spinModes.setSelection(mIndex);

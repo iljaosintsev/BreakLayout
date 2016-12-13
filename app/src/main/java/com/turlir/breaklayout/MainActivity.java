@@ -8,6 +8,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.turlir.breaklayout.layout.BreakLayout;
 import com.turlir.breaklayout.layout.Mode;
@@ -33,9 +37,6 @@ public class MainActivity extends AppCompatActivity implements SettingsDialog.Ca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        Toolbar t = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(t);
     }
 
     @Override
