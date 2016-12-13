@@ -14,12 +14,12 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends Activity implements SettingsDialog.Callback {
 
-    private static final Mode[] MODES = new Mode[]{
-            new Mode(BreakLayout.MODE_RIGHT),
-            new Mode(BreakLayout.MODE_LEFT),
-            new Mode(BreakLayout.MODE_CENTER),
-            new Mode(BreakLayout.MODE_EDGE),
-            new Mode(BreakLayout.MODE_AS_IS),
+    private static final Model[] MODELS = new Model[]{
+            new Model(BreakLayout.MODE_RIGHT),
+            new Model(BreakLayout.MODE_LEFT),
+            new Model(BreakLayout.MODE_CENTER),
+            new Model(BreakLayout.MODE_EDGE),
+            new Model(BreakLayout.MODE_AS_IS),
     };
 
     @BindView(R.id.target)
@@ -48,13 +48,13 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
     }
 
     private void openSettingsDialog() {
-        Mode current = new Mode(target.getMode(), target.getChildCount());
-        SettingsDialog frg = SettingsDialog.newInstance(MODES, current);
+        Model current = new Model(target.getMode(), target.getChildCount());
+        SettingsDialog frg = SettingsDialog.newInstance(MODELS, current);
         frg.show(getFragmentManager(), null);
     }
 
     @Override
-    public void newMode(Mode n) {
+    public void newMode(Model n) {
         int m = n.getId();
         int c = n.getCount();
         // old algorithm

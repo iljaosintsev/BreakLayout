@@ -31,15 +31,20 @@ public class SettingsDialog extends DialogFragment {
     Spinner spinModes;
 
     private Callback mCallback;
-    private CountChangedListener mCountListener;
+    private CountChangedListener mCountListener = new CountChangedListener() {
+        @Override
+        public void onCountChanged() {
+            tvCount.setText(String.valueOf(getCurrentMode().getCount()));
+        }
+    };
 
-    private Mode[] mAllModes;
-    private Mode mCurrentMode;
+    private Model[] mAllModels;
+    private Model mCurrent;
     private int mIndex = -1;
 
-    public static SettingsDialog newInstance(Mode[] allModes, Mode current) {
+    public static SettingsDialog newInstance(Model[] allModels, Model current) {
         Bundle args = new Bundle();
-        args.putParcelableArray(ALL, allModes);
+        args.putParcelableArray(ALL, allModels);
         args.putParcelable(CURRENT, current);
         SettingsDialog instance = new SettingsDialog();
         instance.setArguments(args);
@@ -48,10 +53,10 @@ public class SettingsDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mAllModes = (Mode[]) getArguments().getParcelableArray(ALL);
-        mCurrentMode = getArguments().getParcelable(CURRENT);
-        for (int i = 0; i < mAllModes.length && mCurrentMode != null; i++) {
-            if (mAllModes[i].equals(mCurrentMode)) { // id
+        mAllModels = (Model[]) getArguments().getParcelableArray(ALL);
+        mCurrent = getArguments().getParcelable(CURRENT);
+        for (int i = 0; i < mAllModels.length && mCurrent != null; i++) {
+            if (mAllModels[i].equals(mCurrent)) { // id
                 mIndex = i;
                 break;
             }
@@ -64,7 +69,7 @@ public class SettingsDialog extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mCallback.newMode(mCurrentMode);
+                        mCallback.newMode(mCurrent);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -96,9 +101,9 @@ public class SettingsDialog extends DialogFragment {
     @OnItemSelected(R.id.settings_spinner)
     public void modeSelected(int position) {
         mIndex = position;
-        int id = mAllModes[mIndex].getId();
-        int count = mCurrentMode.getCount();
-        mCurrentMode = new Mode(id, count);
+        int id = mAllModels[mIndex].getId();
+        int count = mCurrent.getCount();
+        mCurrent = new Model(id, count);
     }
 
     private View createView() {
@@ -112,24 +117,18 @@ public class SettingsDialog extends DialogFragment {
 
     private void bindView() {
         ArrayAdapter adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, mAllModes);
+                android.R.layout.simple_list_item_1, mAllModels);
         spinModes.setAdapter(adapter);
         spinModes.setSelection(mIndex);
-        mCountListener = new CountChangedListener() {
-            @Override
-            public void onCountChanged() {
-                tvCount.setText(String.valueOf(getCurrentMode().getCount()));
-            }
-        };
         mCountListener.onCountChanged();
     }
 
-    private Mode getCurrentMode() {
-        return mCurrentMode;
+    private Model getCurrentMode() {
+        return mCurrent;
     }
 
     public interface Callback {
-        void newMode(Mode m);
+        void newMode(Model m);
     }
 
     private interface CountChangedListener {

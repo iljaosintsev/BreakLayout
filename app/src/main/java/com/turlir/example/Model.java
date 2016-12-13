@@ -2,11 +2,12 @@ package com.turlir.example;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.turlir.breaklayout.BreakLayout;
 import com.turlir.breaklayout.Incrementable;
 
-public class Mode implements Incrementable, Parcelable {
+public class Model implements Incrementable, Parcelable {
 
     private static final int
             MIN = 2,
@@ -36,19 +37,19 @@ public class Mode implements Incrementable, Parcelable {
     private int mId;
     private int mCount;
 
-    public Mode(int id) {
+    public Model(int id) {
         this(MAPPER.map(id), id);
     }
 
-    public Mode(int id, int count) {
+    public Model(int id, int count) {
         this(MAPPER.map(id), id, count);
     }
 
-    public Mode(String mode, int id) {
+    public Model(@NonNull String mode, int id) {
         this(mode, id, 2);
     }
 
-    public Mode(String mode, int id, int count) {
+    public Model(@NonNull String mode, int id, int count) {
         this.mode = mode;
         mId = id;
         if (count < MIN || count > MAX) {
@@ -94,7 +95,7 @@ public class Mode implements Incrementable, Parcelable {
 
     //<editor-fold desc="Parcelable">
 
-    private Mode(Parcel in) {
+    private Model(Parcel in) {
         this.mode = in.readString();
         mId = in.readInt();
         mCount = in.readInt();
@@ -107,16 +108,16 @@ public class Mode implements Incrementable, Parcelable {
         dest.writeInt(mCount);
     }
 
-    public static final Creator<Mode> CREATOR = new Creator<Mode>() {
+    public static final Creator<Model> CREATOR = new Creator<Model>() {
 
         @Override
-        public Mode createFromParcel(Parcel in) {
-            return new Mode(in);
+        public Model createFromParcel(Parcel in) {
+            return new Model(in);
         }
 
         @Override
-        public Mode[] newArray(int size) {
-            return new Mode[size];
+        public Model[] newArray(int size) {
+            return new Model[size];
         }
 
     };
@@ -137,9 +138,9 @@ public class Mode implements Incrementable, Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Mode mode = (Mode) o;
+        Model model = (Model) o;
 
-        return mId == mode.mId;
+        return mId == model.mId;
     }
 
     @Override
