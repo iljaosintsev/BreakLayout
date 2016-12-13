@@ -23,7 +23,7 @@ public class Mode implements Incrementable, Parcelable {
                 case BreakLayout.MODE_EDGE:
                     return "EDGE";
                 case BreakLayout.MODE_AS_IS:
-                    return "EDGE";
+                    return "AS IS";
                 default:
                     return "RIGHT";
             }
