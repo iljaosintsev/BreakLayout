@@ -7,7 +7,7 @@
         <item name="android:alertDialogTheme">@style/dialogTheme</item>
     </style>
 
-    <style name="dialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+    <style name="dialogTheme" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:windowTitleStyle">@style/dialogTitleStyle</item>
     </style>
 
