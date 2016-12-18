@@ -4,6 +4,15 @@
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:alertDialogTheme">@style/dialogTheme</item>
+    </style>
+
+    <style name="dialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/dialogTitleStyle</item>
+    </style>
+
+    <style name="dialogTitleStyle" parent="android:TextAppearance.Material.DialogWindowTitle">
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 </resources>
