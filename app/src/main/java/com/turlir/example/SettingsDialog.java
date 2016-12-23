@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.turlir.breaklayout.BreakLayout;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,8 +23,8 @@ import butterknife.OnItemSelected;
 public class SettingsDialog extends DialogFragment {
 
     private static final String
-            ALL = "ALL",
-            CURRENT = "CURRENT";
+            ARG_MODELS_INT_ARR = "ARG_MODELS_INT_ARR",
+            ARG_CURRENT_MODEL = "ARG_CURRENT_MODEL";
 
     @BindView(R.id.settings_child)
     TextView tvCount;
@@ -38,14 +40,14 @@ public class SettingsDialog extends DialogFragment {
         }
     };
 
-    private Model[] mAllModels;
+    private int[] mAllModels;
     private Model mCurrent;
     private int mIndex = -1;
 
-    public static SettingsDialog newInstance(Model[] allModels, Model current) {
+    public static SettingsDialog newInstance(@BreakLayout.Modes int[] allModels, Model current) {
         Bundle args = new Bundle();
-        args.putParcelableArray(ALL, allModels);
-        args.putParcelable(CURRENT, current);
+        args.putIntArray(ARG_MODELS_INT_ARR, allModels);
+        args.putParcelable(ARG_CURRENT_MODEL, current);
         SettingsDialog instance = new SettingsDialog();
         instance.setArguments(args);
         return instance;
@@ -53,10 +55,10 @@ public class SettingsDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mAllModels = (Model[]) getArguments().getParcelableArray(ALL);
-        mCurrent = getArguments().getParcelable(CURRENT);
+        mAllModels = getArguments().getIntArray(ARG_MODELS_INT_ARR);
+        mCurrent = getArguments().getParcelable(ARG_CURRENT_MODEL);
         for (int i = 0; i < mAllModels.length && mCurrent != null; i++) {
-            if (mAllModels[i].equals(mCurrent)) { // id
+            if (mAllModels[i] == mCurrent.getId()) { // id
                 mIndex = i;
                 break;
             }
@@ -101,7 +103,7 @@ public class SettingsDialog extends DialogFragment {
     @OnItemSelected(R.id.settings_spinner)
     public void modeSelected(int position) {
         mIndex = position;
-        int id = mAllModels[mIndex].getId();
+        @BreakLayout.Modes int id = mAllModels[mIndex];
         int count = mCurrent.getCount();
         mCurrent = new Model(id, count);
     }
@@ -116,8 +118,12 @@ public class SettingsDialog extends DialogFragment {
     }
 
     private void bindView() {
+        String[] array = new String[mAllModels.length];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = Model.MAPPER.map(mAllModels[i]);
+        }
         ArrayAdapter adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, mAllModels);
+                android.R.layout.simple_list_item_1, array);
         spinModes.setAdapter(adapter);
         spinModes.setSelection(mIndex);
         mCountListener.onCountChanged();

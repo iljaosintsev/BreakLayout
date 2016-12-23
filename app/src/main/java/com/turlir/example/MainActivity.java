@@ -14,12 +14,12 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends Activity implements SettingsDialog.Callback {
 
-    private static final Model[] MODELS = new Model[]{
-            new Model(BreakLayout.MODE_RIGHT),
-            new Model(BreakLayout.MODE_LEFT),
-            new Model(BreakLayout.MODE_CENTER),
-            new Model(BreakLayout.MODE_EDGE),
-            new Model(BreakLayout.MODE_AS_IS),
+    private static final int[] MODELS = new int[] {
+            BreakLayout.MODE_RIGHT,
+            BreakLayout.MODE_LEFT,
+            BreakLayout.MODE_CENTER,
+            BreakLayout.MODE_EDGE,
+            BreakLayout.MODE_AS_IS,
     };
 
     @BindView(R.id.target)

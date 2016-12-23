@@ -13,7 +13,7 @@ class Model implements Incrementable, Parcelable {
             MIN = 2,
             MAX = 6;
 
-    private static final NameMapper MAPPER = new NameMapper() {
+    static final NameMapper MAPPER = new NameMapper() {
         @Override
         public String map(int mode) {
             switch (mode) {
@@ -153,7 +153,7 @@ class Model implements Incrementable, Parcelable {
         return this.mode;
     }
 
-    private interface NameMapper {
+    interface NameMapper {
         String map(int mode);
     }
 
