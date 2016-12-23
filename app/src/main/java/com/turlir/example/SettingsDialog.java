@@ -65,7 +65,6 @@ public class SettingsDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setIcon(android.R.drawable.ic_menu_edit)
                 .setTitle(R.string.dialog_settings)
-                .setMessage("Message")
                 .setView(createView())
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
