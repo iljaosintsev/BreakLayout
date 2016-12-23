@@ -2,10 +2,13 @@ package com.turlir.breaklayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,11 +145,11 @@ public class BreakLayout extends ViewGroup {
         mMiddleRowSpace = value;
     }
 
-    public int getMode() {
+    public @Modes int getMode() {
         return mMode;
     }
 
-    public void setMode(int value) {
+    public void setMode(@Modes int value) {
         mMode = value;
         requestLayout();
     }
@@ -175,6 +178,17 @@ public class BreakLayout extends ViewGroup {
         }
         tmp.setMiddleRowSpace(getMiddleRowSpace());
         return tmp;
+    }
+
+    @IntDef(flag = true, value = {
+            MODE_LEFT,
+            MODE_RIGHT,
+            MODE_CENTER,
+            MODE_EDGE,
+            MODE_AS_IS,
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Modes {
     }
 
 }

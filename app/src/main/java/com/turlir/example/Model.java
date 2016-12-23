@@ -37,19 +37,19 @@ class Model implements Incrementable, Parcelable {
     private int mId;
     private int mCount;
 
-    Model(int id) {
+    Model(@BreakLayout.Modes int id) {
         this(MAPPER.map(id), id);
     }
 
-    Model(int id, int count) {
+    Model(@BreakLayout.Modes int id, int count) {
         this(MAPPER.map(id), id, count);
     }
 
-    private Model(@NonNull String mode, int id) {
+    private Model(@NonNull String mode, @BreakLayout.Modes int id) {
         this(mode, id, 2);
     }
 
-    private Model(@NonNull String mode, int id, int count) {
+    private Model(@NonNull String mode, @BreakLayout.Modes int id, int count) {
         this.mode = mode;
         mId = id;
         if (count < MIN || count > MAX) {
@@ -129,7 +129,7 @@ class Model implements Incrementable, Parcelable {
 
     //</editor-fold>
 
-    public int getId() {
+    public @BreakLayout.Modes int getId() {
         return mId;
     }
 
