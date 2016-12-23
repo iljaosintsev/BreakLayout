@@ -148,6 +148,7 @@ public class BreakLayout extends ViewGroup {
 
     public void setMode(int value) {
         mMode = value;
+        requestLayout();
     }
 
     private Strategy selectMode(int start, int stop, int row) {

@@ -59,10 +59,9 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
         int c = n.getCount();
         // old algorithm
         int tmp = target.getMode();
-        target.setMode(m);
         if (c > target.getChildCount()) {
             View childAt = target.getChildAt(0);
-            for (int i = 0; i < c - target.getChildCount(); i++) {
+            for (int i = 0; i <= c - target.getChildCount(); i++) {
                 View v = new View(getApplicationContext());
                 v.setLayoutParams(childAt.getLayoutParams());
                 v.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -73,7 +72,7 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
                 target.removeViewAt(i);
             }
         } else if (tmp != m) {
-            target.requestLayout();
+            target.setMode(m);
         }
     }
 
