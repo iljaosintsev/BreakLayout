@@ -25,7 +25,7 @@
         <TextView
             android:id="@+id/settings_child"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/_zero"
