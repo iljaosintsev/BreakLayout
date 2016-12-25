@@ -16,9 +16,9 @@ public class BreakLayout extends ViewGroup {
 
     public static final int MODE_LEFT = 0;
     public static final int MODE_RIGHT = 1;
-    public static final int MODE_CENTER = 2;
+    public static final int MODE_CENTER = 1 << 1;
     public static final int MODE_EDGE = 3;
-    public static final int MODE_AS_IS = 4;
+    public static final int MODE_AS_IS = 1 << 2;
 
     private int mMode;
     private int mMiddleRowSpace;

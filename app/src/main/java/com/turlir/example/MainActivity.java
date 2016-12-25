@@ -83,7 +83,8 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
             for (int i = target.getChildCount() - 1; i >= c; i--) {
                 target.removeViewAt(i);
             }
-        } else if (tmp != m) {
+        }
+        if (tmp != m) {
             target.setMode(m);
         }
     }
