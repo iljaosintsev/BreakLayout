@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,7 +26,8 @@ public class SettingsDialog extends DialogFragment {
 
     private static final String
             ARG_MODELS_INT_ARR = "ARG_MODELS_INT_ARR",
-            ARG_CURRENT_MODEL = "ARG_CURRENT_MODEL";
+            ARG_CURRENT_MODEL = "ARG_CURRENT_MODEL",
+            BUNDLE_CURRENT_MODEL = "BUNDLE_CURRENT_MODEL";
 
     @BindView(R.id.settings_child)
     TextView tvCount;
@@ -54,9 +57,15 @@ public class SettingsDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle state) {
         mAllModels = getArguments().getIntArray(ARG_MODELS_INT_ARR);
-        mCurrent = getArguments().getParcelable(ARG_CURRENT_MODEL);
+        // restore state
+        if (state != null) {
+            mCurrent = state.getParcelable(BUNDLE_CURRENT_MODEL);
+        } else {
+            mCurrent = getArguments().getParcelable(ARG_CURRENT_MODEL);
+        }
+        // select index current model
         for (int i = 0; i < mAllModels.length && mCurrent != null; i++) {
             if (mAllModels[i] == mCurrent.getId()) { // id
                 mIndex = i;
@@ -86,6 +95,12 @@ public class SettingsDialog extends DialogFragment {
         } else {
             throw new IllegalArgumentException("activity must implement callback");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(BUNDLE_CURRENT_MODEL, mCurrent);
+        super.onSaveInstanceState(outState);
     }
 
     @OnClick(R.id.settings_btn_plus)

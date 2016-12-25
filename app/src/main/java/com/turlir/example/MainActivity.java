@@ -22,14 +22,26 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
             BreakLayout.MODE_AS_IS,
     };
 
+    private static final String BUNDLE_MODEL = "BUNDLE_MODEL";
+
     @BindView(R.id.target)
     BreakLayout target;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle state) {
+        super.onCreate(state);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        if (state != null) {
+            newMode((Model) state.getParcelable(BUNDLE_MODEL));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Model m = new Model(target.getMode(), target.getChildCount());
+        outState.putParcelable(BUNDLE_MODEL, m);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
