@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BreakLayout extends ViewGroup {
 
@@ -23,7 +23,7 @@ public class BreakLayout extends ViewGroup {
     private int mMode;
     private int mMiddleRowSpace;
 
-    private Map<Integer, Strategy> mStrategy = new HashMap<>();
+    private List<Strategy> mStrategy = new ArrayList<>();
 
     public BreakLayout(Context context) {
         super(context);
@@ -81,11 +81,11 @@ public class BreakLayout extends ViewGroup {
 
                 rowWidth += childWidth;
 
-                Strategy current = mStrategy.get(rows);
+                Strategy current = mStrategy.size() > rows ? mStrategy.get(rows) : null;
                 if (current == null) {
                     current = selectMode(firstChildInRow, i + 1, rows);
                     current.setParentWidth(layoutWidth);
-                    mStrategy.put(rows, current);
+                    mStrategy.add(rows, current);
                 } else {
                     current.setStop(i + 1);
                 }
