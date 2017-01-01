@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.turlir.breaklayout.BreakLayout;
 
+import java.util.Iterator;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -27,11 +29,15 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
     @BindView(R.id.target)
     BreakLayout target;
 
+    private Iterator<Integer> mColors;
+
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mColors = new PaletteIterator(getResources());
         if (state != null) {
             newMode((Model) state.getParcelable(BUNDLE_MODEL));
         }
@@ -71,10 +77,10 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
         if (c > target.getChildCount()) { // add
             View childAt = target.getChildAt(0);
             int diff = c - target.getChildCount();
-            for (int i = 0; i < diff; ++i) {
+            for (int i = 0; (i < diff) && (mColors.hasNext()); ++i) {
                 View v = new View(getApplicationContext());
                 v.setLayoutParams(childAt.getLayoutParams());
-                v.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                v.setBackgroundColor(mColors.next());
                 target.addView(v);
             }
         } else if (c < target.getChildCount()) { // remove
