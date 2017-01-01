@@ -66,26 +66,27 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
     }
 
     @Override
-    public void newMode(Model n) {
-        int m = n.getId();
-        int c = n.getCount();
-        // old algorithm
-        int tmp = target.getMode();
-        if (c > target.getChildCount()) {
+    public void newMode(Model m) {
+        int c = m.getCount();
+        if (c > target.getChildCount()) { // add
             View childAt = target.getChildAt(0);
-            for (int i = 0; i <= c - target.getChildCount(); i++) {
+            int diff = c - target.getChildCount();
+            for (int i = 0; i < diff; ++i) {
                 View v = new View(getApplicationContext());
                 v.setLayoutParams(childAt.getLayoutParams());
                 v.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 target.addView(v);
             }
-        } else if (c < target.getChildCount()) {
-            for (int i = target.getChildCount() - 1; i >= c; i--) {
-                target.removeViewAt(i);
+        } else if (c < target.getChildCount()) { // remove
+            int diff = target.getChildCount() - c;
+            for (int i = 0; i < diff; ++i) {
+                target.removeViewAt((diff + c) - i - 1); // from end
             }
         }
-        if (tmp != m) {
-            target.setMode(m);
+        // else count not change - nothing
+        // mode change independent
+        if (target.getMode() != m.getId()) {
+            target.setMode(m.getId());
         }
     }
 
