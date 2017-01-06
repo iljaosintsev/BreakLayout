@@ -9,9 +9,10 @@ import com.turlir.breaklayout.Incrementable;
 
 class Model implements Incrementable, Parcelable {
 
-    private static final int
+    static final int
             MIN = 2,
-            MAX = 6;
+            MAX = 6,
+            DEFAULT_COUNT = MIN;
 
     static final NameMapper MAPPER = new NameMapper() {
         @Override
@@ -46,7 +47,7 @@ class Model implements Incrementable, Parcelable {
     }
 
     private Model(@NonNull String mode, @BreakLayout.Modes int id) {
-        this(mode, id, 2);
+        this(mode, id, DEFAULT_COUNT);
     }
 
     private Model(@NonNull String mode, @BreakLayout.Modes int id, int count) {
