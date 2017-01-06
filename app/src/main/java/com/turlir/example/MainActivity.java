@@ -16,14 +16,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends Activity implements SettingsDialog.Callback {
 
-    private static final int[] MODELS = new int[] {
-            BreakLayout.MODE_RIGHT,
-            BreakLayout.MODE_LEFT,
-            BreakLayout.MODE_CENTER,
-            BreakLayout.MODE_EDGE,
-            BreakLayout.MODE_AS_IS,
-    };
-
     private static final String BUNDLE_MODEL = "BUNDLE_MODEL";
 
     @BindView(R.id.target)
@@ -67,7 +59,7 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
 
     private void openSettingsDialog() {
         Model current = new Model(target.getMode(), target.getChildCount());
-        SettingsDialog frg = SettingsDialog.newInstance(MODELS, current);
+        SettingsDialog frg = SettingsDialog.newInstance(current);
         frg.show(getFragmentManager(), null);
     }
 

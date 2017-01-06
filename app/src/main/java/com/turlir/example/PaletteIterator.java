@@ -10,8 +10,8 @@ import java.util.Iterator;
 
 class PaletteIterator implements Iterator<Integer> {
 
-    private TypedArray mPalette;
-    private int mPrimaryColor;
+    private final TypedArray mPalette;
+    private final int mPrimaryColor;
     private int mIndex;
 
     PaletteIterator(Resources res) {

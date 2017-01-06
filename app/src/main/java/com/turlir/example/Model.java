@@ -35,7 +35,7 @@ class Model implements Incrementable, Parcelable {
     };
 
     private final String mode;
-    private int mId;
+    private final int mId;
     private int mCount;
 
     Model(@BreakLayout.Modes int id) {
