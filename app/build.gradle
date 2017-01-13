@@ -3,13 +3,13 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "com.turlir.example"
-        minSdkVersion 21
-        targetSdkVersion 21
+        minSdkVersion 15
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -23,9 +23,11 @@ android {
 }
 
 dependencies {
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
     compile project(':breaklayout')
     compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    testCompile 'junit:junit:4.12'
     compile 'org.mockito:mockito-core:2.5.5'
+
+    testCompile 'junit:junit:4.12'
 }
