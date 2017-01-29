@@ -1,8 +1,10 @@
 package com.turlir.example;
 
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 
 import java.util.Iterator;
@@ -13,9 +15,14 @@ class PaletteIterator implements Iterator<Integer> {
     private final int mPrimaryColor;
     private int mIndex;
 
-    PaletteIterator(Resources res) {
+    PaletteIterator(Context cnt) {
+        Resources res = cnt.getResources();
         mPalette = res.obtainTypedArray(R.array.palette);
-        mPrimaryColor = res.getColor(R.color.colorPrimary);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mPrimaryColor = res.getColor(R.color.colorPrimary, cnt.getTheme());
+        } else {
+            mPrimaryColor = res.getColor(R.color.colorPrimary);
+        }
         mIndex = 0;
     }
 

@@ -1,5 +1,6 @@
 package com.turlir.example;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
@@ -33,7 +34,10 @@ public class PaletteIteratorTest {
         Resources mockRes = Mockito.mock(Resources.class);
         when(mockRes.obtainTypedArray(anyInt())).thenReturn(mockArray);
 
-        mIterator = new PaletteIterator(mockRes);
+        Context mockContext = Mockito.mock(Context.class);
+        when(mockContext.getResources()).thenReturn(mockRes);
+
+        mIterator = new PaletteIterator(mockContext);
     }
 
     @Test

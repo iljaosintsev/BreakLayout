@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements SettingsDialog.Callback {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mColors = new PaletteIterator(getResources());
+        mColors = new PaletteIterator(this); // theme context
         if (state != null) {
             newMode((Model) state.getParcelable(BUNDLE_MODEL));
         }
