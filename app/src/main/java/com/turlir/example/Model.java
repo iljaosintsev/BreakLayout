@@ -7,11 +7,14 @@ import android.support.annotation.NonNull;
 import com.turlir.breaklayout.BreakLayout;
 import com.turlir.breaklayout.Incrementable;
 
+/**
+ * {@link SettingsDialog} model, counter and name mapper
+ */
 class Model implements Incrementable, Parcelable {
 
     static final int
             MIN = 2,
-            MAX = 6,
+            MAX = 13,
             DEFAULT_COUNT = MIN;
 
     static final NameMapper MAPPER = new NameMapper() {
@@ -134,6 +137,8 @@ class Model implements Incrementable, Parcelable {
         return mId;
     }
 
+    //<editor-fold desc="Stuff">
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -153,6 +158,8 @@ class Model implements Incrementable, Parcelable {
     public String toString() {
         return this.mode;
     }
+
+    //</editor-fold>
 
     interface NameMapper {
         String map(int mode);

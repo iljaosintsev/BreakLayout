@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.Iterator;
+import java.util.ListIterator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,14 +19,14 @@ import static org.mockito.Mockito.when;
 
 public class PaletteIteratorTest {
 
-    private static final float LENGTH = 13;
+    private static final int LENGTH = 13;
 
-    private Iterator<Integer> mIterator;
+    private ListIterator<Integer> mIterator;
 
     @Before
     public void setUp() { // mocking palette.xml
         TypedArray mockArray = Mockito.mock(TypedArray.class);
-        when(mockArray.length()).thenReturn((int) LENGTH);
+        when(mockArray.length()).thenReturn(LENGTH);
         for (int i = 0; i < LENGTH; i++) {
             when(mockArray.getColor(eq(i), anyInt())).thenReturn(i);
         }
@@ -41,7 +41,7 @@ public class PaletteIteratorTest {
     }
 
     @Test
-    public void hasNext() throws Exception {
+    public void hasNext() {
         for (int i = 0; i < 2 * LENGTH; i++) {
             mIterator.next();
             assertTrue(mIterator.hasNext());
@@ -49,11 +49,28 @@ public class PaletteIteratorTest {
     }
 
     @Test
-    public void next() throws Exception {
+    public void next() {
         for (int i = 0; i < 2 * LENGTH; i++) {
             Integer next = mIterator.next();
             assertNotNull(next);
-            assertEquals((int) (i % LENGTH), next.intValue());
+            assertEquals(i % LENGTH, next.intValue());
+        }
+    }
+
+    @Test
+    public void hasPrevious() {
+        for (int i = 0; i < 2 * LENGTH; i++) {
+            mIterator.previous();
+            assertTrue(mIterator.hasPrevious());
+        }
+    }
+
+    @Test
+    public void previous() {
+        for (int i = 2 * LENGTH; i > 0; i--) {
+            Integer prev = mIterator.previous();
+            assertNotNull(prev);
+            assertEquals(i % LENGTH, prev.intValue());
         }
     }
 
