@@ -18,12 +18,12 @@
         <View
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#e53935" />
+            android:background="@color/firstColor" />
 
         <View
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#8E24AA" />
+            android:background="@color/secondColor" />
 
     </com.turlir.breaklayout.BreakLayout>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="palette">
-        <item>#F44336</item>
-        <item>#E91E63</item>
+        <item>@color/firstColor</item>
+        <item>@color/secondColor</item>
         <item>#9C27B0</item>
         <item>#673AB7</item>
         <item>#3F51B5</item>
